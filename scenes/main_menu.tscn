@@ -1,0 +1,87 @@
+[gd_scene load_steps=3 format=3 uid="uid://cknxhjg8o46kt"]
+
+[ext_resource type="Script" uid="uid://cmlfoqh4qxxdf" path="res://scripts/lobby.gd" id="1_l6cm7"]
+[ext_resource type="Script" uid="uid://bj422iofx70qx" path="res://scenes/show_players.gd" id="2_ekxnf"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -1.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_l6cm7")
+
+[node name="join_button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 83.0
+offset_top = 57.0
+offset_right = 255.0
+offset_bottom = 116.0
+text = "join a server"
+
+[node name="host_button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 284.0
+offset_top = 57.0
+offset_right = 456.0
+offset_bottom = 116.0
+text = "host"
+
+[node name="start_game_btn" type="Button" parent="."]
+layout_mode = 0
+offset_left = 486.0
+offset_top = 57.0
+offset_right = 658.0
+offset_bottom = 116.0
+text = "start game"
+
+[node name="ign_label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 84.0
+offset_top = 135.0
+offset_right = 162.0
+offset_bottom = 167.0
+text = "In-game name:"
+
+[node name="username_field" type="LineEdit" parent="."]
+layout_mode = 0
+offset_left = 218.0
+offset_top = 130.0
+offset_right = 426.0
+offset_bottom = 161.0
+max_length = 42
+
+[node name="err_text" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 86.0
+offset_top = 168.0
+offset_right = 655.0
+offset_bottom = 191.0
+bbcode_enabled = true
+
+[node name="Label" type="Label" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 87.0
+offset_top = 225.0
+offset_right = 331.0
+offset_bottom = 339.0
+script = ExtResource("2_ekxnf")
+
+[node name="player_list_label" type="Label" parent="Label"]
+visible = false
+layout_mode = 0
+offset_left = -4.0
+offset_top = -28.0
+offset_right = 63.0
+offset_bottom = -5.0
+text = "Players:"
+
+[connection signal="player_connected" from="." to="Label" method="_on_main_menu_player_connected"]
+[connection signal="player_disconnected" from="." to="Label" method="_on_main_menu_player_disconnected"]
+[connection signal="button_down" from="join_button" to="." method="_on_join_button_button_down"]
+[connection signal="button_down" from="host_button" to="." method="_on_host_button_button_down"]
+[connection signal="button_down" from="start_game_btn" to="." method="_on_start_game_btn_button_down"]

@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://el1jlkfohtkc"]
+
+[ext_resource type="PackedScene" uid="uid://ccf2khu5glc8h" path="res://scenes/basic_card.tscn" id="1_errlg"]
+
+[node name="test" type="Node2D"]
+
+[node name="Button" type="Button" parent="."]
+offset_left = 37.0
+offset_top = 25.0
+offset_right = 520.0
+offset_bottom = 243.0
+text = "new card"
+
+[node name="Basic Card" parent="." instance=ExtResource("1_errlg")]
+position = Vector2(532, 502)
+
+[connection signal="pressed" from="Button" to="Basic Card" method="_on_button_pressed"]

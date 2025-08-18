@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://ccf2khu5glc8h"]
+
+[ext_resource type="Script" uid="uid://b8rkbtnsx81b5" path="res://scripts/basic_card.gd" id="1_sake6"]
+
+[node name="Basic Card" type="Node2D"]
+script = ExtResource("1_sake6")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
