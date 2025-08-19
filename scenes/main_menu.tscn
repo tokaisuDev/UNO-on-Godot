@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://cknxhjg8o46kt"]
+[gd_scene load_steps=2 format=3 uid="uid://cknxhjg8o46kt"]
 
-[ext_resource type="Script" uid="uid://cmlfoqh4qxxdf" path="res://scripts/lobby.gd" id="1_l6cm7"]
-[ext_resource type="Script" uid="uid://bj422iofx70qx" path="res://scenes/show_players.gd" id="2_ekxnf"]
+[ext_resource type="Script" uid="uid://cjdjglhxr8ebj" path="res://scripts/main_menu.gd" id="1_l6cm7"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -63,25 +62,20 @@ offset_bottom = 191.0
 bbcode_enabled = true
 
 [node name="Label" type="Label" parent="."]
-visible = false
 layout_mode = 0
 offset_left = 87.0
 offset_top = 225.0
 offset_right = 331.0
 offset_bottom = 339.0
-script = ExtResource("2_ekxnf")
 
-[node name="player_list_label" type="Label" parent="Label"]
-visible = false
+[node name="player_list_label" type="Label" parent="."]
 layout_mode = 0
-offset_left = -4.0
-offset_top = -28.0
-offset_right = 63.0
-offset_bottom = -5.0
+offset_left = 83.0
+offset_top = 197.0
+offset_right = 150.0
+offset_bottom = 220.0
 text = "Players:"
 
-[connection signal="player_connected" from="." to="Label" method="_on_main_menu_player_connected"]
-[connection signal="player_disconnected" from="." to="Label" method="_on_main_menu_player_disconnected"]
 [connection signal="button_down" from="join_button" to="." method="_on_join_button_button_down"]
 [connection signal="button_down" from="host_button" to="." method="_on_host_button_button_down"]
 [connection signal="button_down" from="start_game_btn" to="." method="_on_start_game_btn_button_down"]
