@@ -1,18 +1,15 @@
 [gd_scene load_steps=7 format=3 uid="uid://da3av2ntkyd3k"]
 
 [ext_resource type="PackedScene" uid="uid://0qd45loq3uly" path="res://scenes/ui.tscn" id="1_s3esy"]
-[ext_resource type="PackedScene" uid="uid://dqpwnuo7mq7eq" path="res://scenes/board.tscn" id="2_72e8q"]
 [ext_resource type="PackedScene" uid="uid://c3vxru085k6u5" path="res://scenes/Card.tscn" id="3_0rdsr"]
 [ext_resource type="PackedScene" uid="uid://d3ema2b36ytps" path="res://scenes/hand.tscn" id="4_ipu61"]
 [ext_resource type="PackedScene" uid="uid://c8rabjewwm8nm" path="res://scenes/manager.tscn" id="5_ipu61"]
+[ext_resource type="Texture2D" uid="uid://cnm50q5f8of8t" path="res://assets/cards/back_cover.png" id="6_wi4c7"]
 [ext_resource type="PackedScene" uid="uid://ccf2khu5glc8h" path="res://scenes/basic_card.tscn" id="6_ygxny"]
 
 [node name="Main Game" type="Node2D"]
 
 [node name="UI" parent="." instance=ExtResource("1_s3esy")]
-visible = false
-
-[node name="Board" parent="." instance=ExtResource("2_72e8q")]
 visible = false
 
 [node name="Card" parent="." instance=ExtResource("3_0rdsr")]
@@ -25,11 +22,11 @@ position = Vector2(594, 590)
 [node name="Manager" parent="." instance=ExtResource("5_ipu61")]
 
 [node name="Button" type="Button" parent="."]
-offset_left = 330.0
-offset_top = 159.0
-offset_right = 396.0
-offset_bottom = 205.0
-text = "new card"
+offset_left = 142.0
+offset_top = 66.0
+offset_right = 316.0
+offset_bottom = 331.0
+icon = ExtResource("6_wi4c7")
 
 [node name="Basic Card" parent="." instance=ExtResource("6_ygxny")]
 

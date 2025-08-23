@@ -29,7 +29,17 @@ offset_right = 456.0
 offset_bottom = 116.0
 text = "host"
 
+[node name="leave_button" type="Button" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 83.0
+offset_top = 60.0
+offset_right = 255.0
+offset_bottom = 119.0
+text = "leave server"
+
 [node name="start_game_btn" type="Button" parent="."]
+visible = false
 layout_mode = 0
 offset_left = 486.0
 offset_top = 57.0
@@ -78,4 +88,5 @@ text = "Players:"
 
 [connection signal="button_down" from="join_button" to="." method="_on_join_button_button_down"]
 [connection signal="button_down" from="host_button" to="." method="_on_host_button_button_down"]
+[connection signal="button_down" from="leave_button" to="." method="_on_leave_button_button_down"]
 [connection signal="button_down" from="start_game_btn" to="." method="_on_start_game_btn_button_down"]
