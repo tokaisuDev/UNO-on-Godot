@@ -12,13 +12,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.391869, 0.616211, 0.269121, 1)
 
-[node name="PlayerInfo" type="Label" parent="."]
-offset_left = 948.0
-offset_top = 566.0
-offset_right = 1112.0
-offset_bottom = 618.0
-
-[node name="Button" type="Button" parent="."]
+[node name="Deck" type="Button" parent="."]
 anchors_preset = -1
 anchor_left = 0.138
 anchor_top = 0.115
@@ -28,3 +22,34 @@ offset_right = 8.0
 offset_bottom = 8.0
 icon = ExtResource("1_nt7q6")
 flat = true
+
+[node name="PlayerStats" type="Label" parent="."]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -23.0
+offset_right = 169.0
+grow_vertical = 0
+
+[node name="OpponentStats1" type="Label" parent="."]
+offset_right = 169.0
+offset_bottom = 23.0
+
+[node name="OpponentStats2" type="Label" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -169.0
+offset_bottom = 23.0
+grow_horizontal = 0
+
+[node name="OpponentStats3" type="Label" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -169.0
+offset_top = -23.0
+grow_horizontal = 0
+grow_vertical = 0
