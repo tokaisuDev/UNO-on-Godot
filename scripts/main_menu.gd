@@ -4,12 +4,12 @@ var player_list
 var connected = false
 
 func _ready() -> void:
-	Lobby.player_connected.connect(_on_player_connect)
-	Lobby.player_disconnected.connect(_on_player_disconnect)
-	Lobby.server_disconnected.connect(_on_server_disconnect)
+	Networker.player_connected.connect(_on_player_connect)
+	Networker.player_disconnected.connect(_on_player_disconnect)
+	Networker.server_disconnected.connect(_on_server_disconnect)
 
 func update_player_list():
-	player_list = Lobby.get_players()
+	player_list = Networker.get_players()
 
 func show_players():
 	var final_text = ""
@@ -28,8 +28,8 @@ func _on_join_button_button_down() -> void:
 	$leave_button.visible = true
 	
 	connected = true
-	Lobby.update_player_info($username_field.text)
-	Lobby.join_game()
+	Networker.update_player_info($username_field.text)
+	Networker.join_game()
 	
 	$err_text.text = "[color=#5cb85c]Joined as %s[/color] [color=FFDE21]Waiting for other players...[/color]" % $username_field.text
 	update_player_list()
@@ -40,9 +40,9 @@ func _on_host_button_button_down() -> void:
 		$err_text.text = "[color=#ED4337]Please enter your in-game name before joining.[/color]"
 		return
 		
-	Lobby.update_player_info($username_field.text)
+	Networker.update_player_info($username_field.text)
 	
-	var status = Lobby.host_game()
+	var status = Networker.host_game()
 	if status != "OK":
 		$err_text.text = "[color=#ED4337]Failed to host game: %s[/color]" % str(status)
 		return
@@ -57,7 +57,7 @@ func _on_host_button_button_down() -> void:
 	show_players()
 
 func _on_leave_button_button_down() -> void:
-	Lobby.leave_game()
+	Networker.leave_game()
 	connected = false
 	
 	$leave_button.visible = false
@@ -76,7 +76,7 @@ func _on_player_disconnect(pid, name):
 	show_players()
 	
 func _on_player_connect(pid, info, is_server):
-	if info != Lobby.get_info() and is_server:
+	if info != Networker.get_info() and is_server:
 		$err_text.text = "%s has joined the game." % info["name"]
 	update_player_list()
 	show_players()

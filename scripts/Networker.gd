@@ -3,14 +3,23 @@ extends Control
 signal player_connected(peer_id, player_info, is_server)
 signal player_disconnected(peer_id, name)
 signal server_disconnected()
+signal order_generated(play_order)
+
+# game signals
+signal new_turn(pid)
 
 const PORT = 8080
 const ADDR = "192.168.1.6"
 
 var players = {}
-var own_info = {"name" : null}
+var own_info = {"name" : null, "skips": 0}
 var peer
 var players_loaded = 0
+
+# game related variables.
+var playing_order = []
+var turn_idx = -1
+var turn_offset = 1
 
 func _ready():
 	multiplayer.peer_connected.connect(_on_player_connected)
@@ -94,3 +103,21 @@ func get_players():
 
 func get_info():
 	return own_info
+
+# game related functions.
+func generate_order():
+	for id in players:
+		playing_order.append(id)
+	playing_order.shuffle()
+	order_generated.emit(playing_order)
+
+func advance_turn():
+	if players.is_empty():
+		return
+	turn_idx = (turn_idx + 1 + players.size()) % players.size()
+	var curr_pid = playing_order[turn_idx]
+	
+	set_turn.rpc(curr_pid)
+
+func set_turn(curr_pid):
+	new_turn.emit(curr_pid)

@@ -1,9 +1,15 @@
 extends Node2D
 
+signal card_discarded
+
 var CardScene = preload("res://scenes/Card.tscn")
+var back_cover = preload("res://assets/cards/back_cover.png")
 var owned = false
+var owner_id
 
 func _process(delta: float):
+	if not owned:
+		return
 	var mouse_pos = get_global_mouse_position()
 	var card_to_be_raised_idx = -1
 	var z_max = -999
@@ -23,9 +29,13 @@ func _process(delta: float):
 			card.hover_down()
 
 func spawn_card_with_slide(color, value):
-	var card = CardScene.instantiate()
-	card.setup(color, value)
-
+	var card
+	if owned:
+		card = CardScene.instantiate()
+		card.setup(color, value)
+		card.is_picked.connect(play_card)
+	else:
+		card = back_cover.instantiate()
 	var final_index = get_child_count()
 	var spacing = 60
 	var final_pos = Vector2(-((final_index) * spacing) / 2 + final_index * spacing, 0)
@@ -54,3 +64,23 @@ func layout_hand():
 		var tween = create_tween()
 		tween.tween_property(card, "position", target_pos, 0.3).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 		card.update_original_pos(card.position)
+
+func play_card(card):
+	var ok = $"../GameManager".request_play_card(card)
+	if ok:
+		var card_global_pos = card.global_position
+		card.reparent($"../DiscardPile")
+		card.global_position = card_global_pos
+		
+		var target_pos = $"../DiscardPile".global_position
+		var tween = create_tween()
+		tween.tween_property(card, "global_position", target_pos, 0.5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		tween.tween_property(card, "rotation_degrees", randf_range(-80, 80), 0.5)
+		layout_hand()
+
+func play_card_as_opponent(card):
+	if owned:
+		return
+	var card_to_be_played = get_child(0)
+	card_to_be_played.setup(card.color, card.value)
+	play_card(card_to_be_played)

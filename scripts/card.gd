@@ -1,10 +1,10 @@
 extends Area2D
 
-signal hovered(card: Area2D)
-signal unhovered(card: Area2D)
+signal is_picked(card)
 
 @export var card_color: String
 @export var card_value: String
+var owned = true
 
 var tween: Tween
 var original_position: Vector2
@@ -12,6 +12,10 @@ var setup_finished = false
 
 func _ready():
 	original_position = position
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		is_picked.emit(self)
 
 func setup(color: String, value: String):
 	setup_finished = true
@@ -47,9 +51,3 @@ func get_rect() -> Rect2:
 		var tex_size = $Sprite2D.texture.get_size()
 		return Rect2(-tex_size.x / 2, -tex_size.y / 2, tex_size.x, tex_size.y)
 	return Rect2()
-
-func _on_mouse_entered() -> void:
-	hovered.emit(self)
-
-func _on_mouse_exited() -> void:
-	unhovered.emit(self)

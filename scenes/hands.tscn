@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://bccfvhhs78bhd"]
+
+[ext_resource type="Script" uid="uid://dlna1esd77c7e" path="res://scripts/hands_manager.gd" id="1_kiutv"]
+[ext_resource type="PackedScene" uid="uid://d3ema2b36ytps" path="res://scenes/hand.tscn" id="2_sfe0i"]
+
+[node name="Hands" type="Node2D"]
+script = ExtResource("1_kiutv")
+
+[node name="PlayerHand" parent="." instance=ExtResource("2_sfe0i")]
+
+[node name="OpHand1" parent="." instance=ExtResource("2_sfe0i")]
+
+[node name="OpHand2" parent="." instance=ExtResource("2_sfe0i")]
+
+[node name="OpHand3" parent="." instance=ExtResource("2_sfe0i")]

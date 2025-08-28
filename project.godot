@@ -18,7 +18,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 CardDatabase="*res://scripts/CardDatabase.gd"
-Lobby="*res://scripts/lobby.gd"
+Networker="*res://scripts/Networker.gd"
 
 [rendering]
 

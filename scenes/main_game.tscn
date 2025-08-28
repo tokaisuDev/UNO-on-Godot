@@ -1,27 +1,26 @@
-[gd_scene load_steps=7 format=3 uid="uid://da3av2ntkyd3k"]
+[gd_scene load_steps=9 format=3 uid="uid://da3av2ntkyd3k"]
 
 [ext_resource type="PackedScene" uid="uid://0qd45loq3uly" path="res://scenes/ui.tscn" id="1_s3esy"]
+[ext_resource type="Script" uid="uid://c3b6u7tug1dfu" path="res://scripts/game.gd" id="1_wi4c7"]
 [ext_resource type="PackedScene" uid="uid://c3vxru085k6u5" path="res://scenes/Card.tscn" id="3_0rdsr"]
 [ext_resource type="PackedScene" uid="uid://d3ema2b36ytps" path="res://scenes/hand.tscn" id="4_ipu61"]
 [ext_resource type="PackedScene" uid="uid://c8rabjewwm8nm" path="res://scenes/manager.tscn" id="5_ipu61"]
 [ext_resource type="Texture2D" uid="uid://cnm50q5f8of8t" path="res://assets/cards/back_cover.png" id="6_wi4c7"]
 [ext_resource type="PackedScene" uid="uid://ccf2khu5glc8h" path="res://scenes/basic_card.tscn" id="6_ygxny"]
+[ext_resource type="Script" uid="uid://c2rlvg2v86y14" path="res://scripts/discard_pile.gd" id="8_70vka"]
 
 [node name="Main Game" type="Node2D"]
+script = ExtResource("1_wi4c7")
 
 [node name="UI" parent="." instance=ExtResource("1_s3esy")]
-visible = false
 
 [node name="Card" parent="." instance=ExtResource("3_0rdsr")]
 visible = false
 position = Vector2(593, 341)
 
-[node name="PlayerHand" parent="." instance=ExtResource("4_ipu61")]
-position = Vector2(594, 590)
+[node name="GameManager" parent="." instance=ExtResource("5_ipu61")]
 
-[node name="Manager" parent="." instance=ExtResource("5_ipu61")]
-
-[node name="Button" type="Button" parent="."]
+[node name="Deck" type="Button" parent="."]
 offset_left = 142.0
 offset_top = 66.0
 offset_right = 316.0
@@ -30,5 +29,19 @@ icon = ExtResource("6_wi4c7")
 
 [node name="Basic Card" parent="." instance=ExtResource("6_ygxny")]
 
-[connection signal="pressed" from="Button" to="Card" method="_on_button_pressed"]
-[connection signal="pressed" from="Button" to="Basic Card" method="_on_button_pressed"]
+[node name="PlayerHand" parent="." instance=ExtResource("4_ipu61")]
+
+[node name="OpHand2" parent="." instance=ExtResource("4_ipu61")]
+
+[node name="OpHand1" parent="." instance=ExtResource("4_ipu61")]
+
+[node name="OpHand3" parent="." instance=ExtResource("4_ipu61")]
+
+[node name="DiscardPile" type="Node2D" parent="."]
+script = ExtResource("8_70vka")
+
+[connection signal="played_card" from="GameManager" to="." method="_on_game_manager_played_card"]
+[connection signal="pressed" from="Deck" to="." method="_on_deck_pressed"]
+[connection signal="pressed" from="Deck" to="Card" method="_on_button_pressed"]
+[connection signal="pressed" from="Deck" to="Basic Card" method="_on_button_pressed"]
+[connection signal="card_discarded" from="PlayerHand" to="DiscardPile" method="_on_player_hand_card_discarded"]
