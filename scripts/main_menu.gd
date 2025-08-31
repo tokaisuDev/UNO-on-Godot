@@ -66,7 +66,7 @@ func _on_leave_button_button_down() -> void:
 	
 
 func _on_start_game_btn_button_down() -> void:
-	pass # Replace with function body.
+	Networker.start_game()
 
 func _on_player_disconnect(pid, name):
 	if not connected:

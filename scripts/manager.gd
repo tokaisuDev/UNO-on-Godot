@@ -21,8 +21,6 @@ var cards_penalty = 0
 var skips = 0
 
 func _ready() -> void:
-	#connecting signals
-	Networker.new_turn.connect(process_turn)
 	#timer setup
 	timer = Timer.new()
 	timer.one_shot = true
@@ -42,16 +40,24 @@ func get_card():
 		renew_deck()
 	return deck.pop_back()
 	
-@rpc("authority", "call_local")
-func give_card(player_id, card):
+func give_card(player_id):
+	var card = get_card()
+	if player_id == 1:
+		$"../PlayerHand".spawn_card_with_slide(card[0], card[1])
+	else:
+		receive_card.rpc_id(player_id, card)
+	notify_card_draw.rpc(player_id)
+
+@rpc
+func receive_card(card):
 	$"../PlayerHand".spawn_card_with_slide(card[0], card[1])
 
-func request_draw_card(player_id):
-	if player_id != current_turn:
+@rpc("any_peer", "call_local")
+func request_draw_card():
+	var caller_id = multiplayer.get_remote_sender_id()
+	if caller_id != current_turn:
 		return
-	var card = get_card()
-	give_card.rpc_id(player_id, card)
-	notify_card_draw.rpc(player_id)
+	give_card(caller_id)
 	Networker.advance_turn()
 
 func playable_check(card):
@@ -84,8 +90,8 @@ func request_play_card(card):
 
 @rpc
 func notify_card_draw(player_id):
-	if player_id != multiplayer.get_unique_id():
-		drew_card.emit(player_id)
+	print(1)
+	drew_card.emit(player_id)
 
 @rpc
 func notify_turn(player_id):
@@ -93,7 +99,7 @@ func notify_turn(player_id):
 
 func process_turn(player_id):
 	if early_game:
-		request_draw_card(player_id)
+		give_card(player_id)
 	else:
 		current_turn = player_id
 		timer.start(turn_time)
@@ -103,14 +109,18 @@ func _on_turn_timeout():
 	if multiplayer.is_server():
 		if cards_penalty > 0:
 			while cards_penalty:
-				request_draw_card(current_turn)
+				give_card(current_turn)
 			Networker.advance_turn()
 		elif skips > 0:
 			players_info[current_turn]["skips"] = skips
 			skips = 0
 			Networker.advance_turn()
 		else:
-			request_draw_card(current_turn)
+			give_card(current_turn)
+
+@rpc("any_peer", "call_local", "reliable")
+func request_end_game():
+	get_tree().change_scene_to_file("res://scenes/endgame_menu.tscn")
 
 func start_game():
 	if not multiplayer.is_server():

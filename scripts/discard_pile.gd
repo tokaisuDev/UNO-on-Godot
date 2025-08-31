@@ -1,5 +1,4 @@
-extends Node2D
-
+extends Control
 
 func _on_player_hand_card_discarded() -> void:
 	if get_child_count() > 10:

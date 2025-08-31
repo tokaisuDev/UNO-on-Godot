@@ -5,11 +5,8 @@ signal player_disconnected(peer_id, name)
 signal server_disconnected()
 signal order_generated(play_order)
 
-# game signals
-signal new_turn(pid)
-
 const PORT = 8080
-const ADDR = "192.168.1.6"
+const ADDR = "192.168.1.7"
 
 var players = {}
 var own_info = {"name" : null, "skips": 0}
@@ -84,8 +81,11 @@ func join_game():
 	multiplayer.multiplayer_peer = peer
 	return "OK"
 
+func start_game():
+	load_game.rpc()
+
 @rpc("call_local", "reliable")
-func start_game() -> void:
+func load_game() -> void:
 	get_tree().change_scene_to_file("res://scenes/main_game.tscn")
 
 @rpc("any_peer", "call_local", "reliable")
@@ -93,7 +93,7 @@ func player_loaded():
 	if multiplayer.is_server():
 		players_loaded += 1
 		if players_loaded == players.size():
-			$/root/main_game.start_game()
+			$/root/Game/GameManager.start_game()
 
 func leave_game():
 	multiplayer.multiplayer_peer.close()
@@ -114,10 +114,6 @@ func generate_order():
 func advance_turn():
 	if players.is_empty():
 		return
-	turn_idx = (turn_idx + 1 + players.size()) % players.size()
+	turn_idx = (turn_idx + turn_offset + players.size()) % players.size()
 	var curr_pid = playing_order[turn_idx]
-	
-	set_turn.rpc(curr_pid)
-
-func set_turn(curr_pid):
-	new_turn.emit(curr_pid)
+	$/root/Game/GameManager.process_turn(curr_pid)
