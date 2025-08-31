@@ -21,7 +21,7 @@ color = Color(0.392157, 0.615686, 0.270588, 1)
 [node name="UI" parent="." instance=ExtResource("1_s3esy")]
 
 [node name="Card" parent="." instance=ExtResource("3_0rdsr")]
-position = Vector2(593, 341)
+position = Vector2(589, 212)
 
 [node name="GameManager" parent="." instance=ExtResource("5_ipu61")]
 
@@ -41,7 +41,7 @@ position = Vector2(1069, 122)
 rotation = 3.14159
 
 [node name="OpHand1" parent="." instance=ExtResource("4_ipu61")]
-position = Vector2(218, 602)
+position = Vector2(301, 586)
 rotation = 1.5708
 
 [node name="OpHand3" parent="." instance=ExtResource("4_ipu61")]

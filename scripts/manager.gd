@@ -45,6 +45,7 @@ func give_card(player_id):
 	if player_id == 1:
 		$"../PlayerHand".spawn_card_with_slide(card[0], card[1])
 	else:
+		drew_card.emit(player_id)
 		receive_card.rpc_id(player_id, card)
 	notify_card_draw.rpc(player_id)
 
@@ -90,7 +91,6 @@ func request_play_card(card):
 
 @rpc
 func notify_card_draw(player_id):
-	print(1)
 	drew_card.emit(player_id)
 
 @rpc

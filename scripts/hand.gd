@@ -5,7 +5,7 @@ signal card_discarded
 var CardScene = preload("res://scenes/Card.tscn")
 var back_cover = preload("res://assets/cards/back_cover.png")
 var owned = false
-var owner_id
+var owner_id : int = -1
 
 #func _ready():
 	#_update_position()

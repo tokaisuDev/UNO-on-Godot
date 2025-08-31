@@ -110,6 +110,11 @@ func generate_order():
 		playing_order.append(id)
 	playing_order.shuffle()
 	order_generated.emit(playing_order)
+	sendPlayingOrder.rpc(playing_order)
+
+@rpc
+func sendPlayingOrder(PO):
+	order_generated.emit(PO)
 
 func advance_turn():
 	if players.is_empty():
