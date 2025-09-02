@@ -48,6 +48,7 @@ func give_card(player_id):
 		drew_card.emit(player_id)
 		receive_card.rpc_id(player_id, card)
 	notify_card_draw.rpc(player_id)
+	Networker.advance_turn()
 
 @rpc
 func receive_card(card):
@@ -107,6 +108,7 @@ func process_turn(player_id):
 
 func _on_turn_timeout():
 	if multiplayer.is_server():
+		print("timeout")
 		if cards_penalty > 0:
 			while cards_penalty:
 				give_card(current_turn)
