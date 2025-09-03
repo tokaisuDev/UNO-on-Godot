@@ -12,8 +12,8 @@ const on_start_card_amount = 7
 const turn_time = 10
 var deck = []
 var early_game = true
-var current_turn
-var MostRecentCard
+var current_turn = null
+var MostRecentCard = null
 var players_info = {}
 
 #effects
@@ -63,6 +63,8 @@ func request_draw_card():
 	Networker.advance_turn()
 
 func playable_check(card):
+	if MostRecentCard == null:
+		return true
 	if cards_penalty > 0 and card.value not in ["+2", "+4"]:
 		return false
 	if skips > 0 and card.value != "skip":
@@ -112,6 +114,7 @@ func _on_turn_timeout():
 		if cards_penalty > 0:
 			while cards_penalty:
 				give_card(current_turn)
+				cards_penalty -= 1
 			Networker.advance_turn()
 		elif skips > 0:
 			players_info[current_turn]["skips"] = skips
