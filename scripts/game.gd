@@ -33,7 +33,6 @@ func assigningOpponentsToHands(playing_order):
 	for i in range(1,4):
 		player_idx += 1
 		player_idx = player_idx % 4
-		print(player_idx)
 		var op_hand = get_node("OpHand%s" % str(i))
 		op_hand.owner_id = 	playing_order[player_idx]
 		print("opponent hand number %s is assigned player id %s" % [i, op_hand.owner_id])

@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://da3av2ntkyd3k"]
+[gd_scene load_steps=9 format=3 uid="uid://da3av2ntkyd3k"]
 
 [ext_resource type="PackedScene" uid="uid://0qd45loq3uly" path="res://scenes/ui.tscn" id="1_s3esy"]
 [ext_resource type="Script" uid="uid://c3b6u7tug1dfu" path="res://scripts/game.gd" id="1_wi4c7"]
 [ext_resource type="PackedScene" uid="uid://c3vxru085k6u5" path="res://scenes/Card.tscn" id="3_0rdsr"]
+[ext_resource type="Script" uid="uid://cwfee4vo6nf0p" path="res://scripts/ui.gd" id="3_70vka"]
 [ext_resource type="PackedScene" uid="uid://d3ema2b36ytps" path="res://scenes/hand.tscn" id="4_ipu61"]
 [ext_resource type="PackedScene" uid="uid://c8rabjewwm8nm" path="res://scenes/manager.tscn" id="5_ipu61"]
 [ext_resource type="Texture2D" uid="uid://cnm50q5f8of8t" path="res://assets/cards/back_cover.png" id="6_wi4c7"]
@@ -19,6 +20,7 @@ offset_bottom = 1238.0
 color = Color(0.392157, 0.615686, 0.270588, 1)
 
 [node name="UI" parent="." instance=ExtResource("1_s3esy")]
+script = ExtResource("3_70vka")
 
 [node name="Card" parent="." instance=ExtResource("3_0rdsr")]
 position = Vector2(589, 212)
@@ -34,7 +36,7 @@ icon = ExtResource("6_wi4c7")
 flat = true
 
 [node name="PlayerHand" parent="." instance=ExtResource("4_ipu61")]
-position = Vector2(923, 791)
+position = Vector2(820, 899)
 
 [node name="OpHand2" parent="." instance=ExtResource("4_ipu61")]
 position = Vector2(1069, 122)
@@ -56,6 +58,8 @@ grow_vertical = 2
 script = ExtResource("8_70vka")
 metadata/_edit_use_anchors_ = true
 
+[connection signal="player_turn" from="GameManager" to="UI" method="on_player_turn"]
+[connection signal="turn_end" from="GameManager" to="UI" method="on_turn_end"]
 [connection signal="pressed" from="Deck" to="." method="_on_deck_pressed"]
 [connection signal="pressed" from="Deck" to="Card" method="_on_button_pressed"]
 [connection signal="card_discarded" from="PlayerHand" to="DiscardPile" method="_on_player_hand_card_discarded"]

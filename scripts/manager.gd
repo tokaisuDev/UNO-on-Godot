@@ -49,7 +49,8 @@ func give_card(player_id):
 		drew_card.emit(player_id)
 		receive_card.rpc_id(player_id, card)
 	notify_card_draw.rpc(player_id)
-	Networker.advance_turn()
+	if not early_game:
+		Networker.advance_turn()
 
 @rpc
 func receive_card(card):
@@ -109,7 +110,7 @@ func process_turn(player_id):
 	if early_game:
 		give_card(player_id)
 	else:
-		if players_info[player_id]["skips"]:
+		if players_info[player_id]["skips"] > 0:
 			Networker.advance_turn()
 			return
 		if current_turn:
@@ -146,7 +147,6 @@ func start_game():
 	for player in players_info:
 		players_info[player]["skips"] = 0
 	renew_deck()
-	MostRecentCard = get_card()
 	for k in range(on_start_card_amount):
 		for i in range(4):
 			Networker.advance_turn()

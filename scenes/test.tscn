@@ -21,15 +21,18 @@ position = Vector2(532, 502)
 position = Vector2(874, 757)
 
 [node name="Hand2" parent="." instance=ExtResource("3_74lek")]
+visible = false
 position = Vector2(1513, 432)
 rotation = 4.71239
 
 [node name="Hand3" parent="." instance=ExtResource("3_74lek")]
+visible = false
 position = Vector2(991, 101)
 rotation = 3.14159
 
 [node name="Hand4" parent="." instance=ExtResource("3_74lek")]
+visible = false
 position = Vector2(100, 448)
 rotation = 1.5708
 
-[connection signal="button_down" from="Button" to="." method="_on_button_button_down"]
+[connection signal="button_down" from="Button" to="Hand" method="raise_hand"]

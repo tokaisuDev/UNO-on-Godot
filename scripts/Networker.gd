@@ -6,7 +6,7 @@ signal server_disconnected()
 signal order_generated(play_order)
 
 const PORT = 8080
-const ADDR = "192.168.1.7"
+const ADDR = "192.168.1.6"
 
 var players = {}
 var own_info = {"name" : null, "skips": 0}
@@ -103,6 +103,9 @@ func get_players():
 
 func get_info():
 	return own_info
+
+func get_name_from_id(player_id):
+	return players[player_id]["name"]
 
 # game related functions.
 func generate_order():
