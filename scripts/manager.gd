@@ -2,6 +2,7 @@ extends Node
 
 signal drew_card(player_id)
 signal player_turn(player_id)
+signal turn_end(player_id)
 signal played_card(player_id, card)
 
 # nodes
@@ -99,11 +100,20 @@ func notify_card_draw(player_id):
 @rpc
 func notify_turn(player_id):
 	player_turn.emit(player_id)
+	
+@rpc
+func notify_turn_end(player_id):
+	turn_end.emit(player_id)
 
 func process_turn(player_id):
 	if early_game:
 		give_card(player_id)
 	else:
+		if players_info[player_id]["skips"]:
+			Networker.advance_turn()
+			return
+		if current_turn:
+			notify_turn_end(current_turn)
 		current_turn = player_id
 		timer.start(turn_time)
 		notify_turn.rpc(player_id)
