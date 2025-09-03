@@ -90,9 +90,14 @@ func request_play_card(card):
 		elif card.value == "+4":
 			cards_penalty += 4
 		played_card.emit(multiplayer.get_remote_sender_id(), card)
+		notify_card_play.rpc(multiplayer.get_remote_sender_id(), card)
 		Networker.advance_turn()
 		return true
 	return false
+
+@rpc
+func notify_card_play(player_id, card):
+	played_card.emit(multiplayer.get_remote_sender_id(), card)
 
 @rpc
 func notify_card_draw(player_id):

@@ -86,24 +86,24 @@ func layout_hand():
 		tween.tween_property(card, "position", target_pos, 0.3).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 		card.update_original_pos(card.position)
 
-#func play_card(card):
-	#var ok = $"../GameManager".request_play_card(card)
-	#if ok:
-		#var card_global_pos = card.global_position
-		#card.reparent($"../DiscardPile")
-		#card.global_position = card_global_pos
-		#
-		#var target_pos = $"../DiscardPile".global_position
-		#var tween = create_tween()
-		#tween.tween_property(card, "global_position", target_pos, 0.5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-		#tween.tween_property(card, "rotation_degrees", randf_range(-80, 80), 0.5)
-		#layout_hand()
-		#if get_child_count() == 0:
-			#$"../GameManager".request_
-#
-#func play_card_as_opponent(card):
-	#if owned:
-		#return
-	#var card_to_be_played = get_child(0)
-	#card_to_be_played.setup(card.color, card.value)
-	#play_card(card_to_be_played)
+func play_card(card):
+	var ok = $"../GameManager".request_play_card(card)
+	if ok:
+		var card_global_pos = card.global_position
+		card.reparent($"../DiscardPile")
+		card.global_position = card_global_pos
+		
+		var target_pos = $"../DiscardPile".global_position
+		var tween = create_tween()
+		tween.tween_property(card, "global_position", target_pos, 0.5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		tween.tween_property(card, "rotation_degrees", randf_range(-80, 80), 0.5)
+		layout_hand()
+		if get_child_count() == 0:
+			$"../GameManager".request_
+
+func play_card_as_opponent(card):
+	if owned:
+		return
+	var card_to_be_played = get_child(0)
+	card_to_be_played.setup(card.color, card.value)
+	play_card(card_to_be_played)

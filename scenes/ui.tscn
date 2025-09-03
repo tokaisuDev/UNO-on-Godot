@@ -4,32 +4,55 @@
 follow_viewport_enabled = true
 
 [node name="PlayerInfo" type="Label" parent="."]
-anchors_preset = 2
+anchors_preset = 7
+anchor_left = 0.5
 anchor_top = 1.0
+anchor_right = 0.5
 anchor_bottom = 1.0
-offset_top = -23.0
-offset_right = 169.0
+offset_left = -84.5
+offset_top = -206.0
+offset_right = 84.5
+offset_bottom = -183.0
+grow_horizontal = 2
 grow_vertical = 0
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="OpponentInfo1" type="Label" parent="."]
-offset_right = 169.0
-offset_bottom = 23.0
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 132.0
+offset_top = -11.5
+offset_right = 301.0
+offset_bottom = 11.5
+grow_vertical = 2
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="OpponentInfo2" type="Label" parent="."]
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -169.0
-offset_bottom = 23.0
-grow_horizontal = 0
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -84.5
+offset_top = 153.0
+offset_right = 84.5
+offset_bottom = 176.0
+grow_horizontal = 2
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="OpponentInfo3" type="Label" parent="."]
-anchors_preset = 3
+anchors_preset = 6
 anchor_left = 1.0
-anchor_top = 1.0
+anchor_top = 0.5
 anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -169.0
-offset_top = -23.0
+anchor_bottom = 0.5
+offset_left = -280.0
+offset_top = -11.5
+offset_right = -111.0
+offset_bottom = 11.5
 grow_horizontal = 0
-grow_vertical = 0
+grow_vertical = 2
+horizontal_alignment = 1
+vertical_alignment = 1

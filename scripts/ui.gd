@@ -10,6 +10,7 @@ func assigning_names(playing_order):
 		if playing_order[i] == multiplayer.get_unique_id():
 			player_idx = i
 			break
+	$PlayerInfo.text = players_info[playing_order[player_idx]]["name"]
 	for i in range(1,4):
 		player_idx += 1
 		player_idx %= 4
