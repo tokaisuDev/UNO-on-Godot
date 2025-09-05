@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://el1jlkfohtkc"]
 
-[ext_resource type="PackedScene" uid="uid://ccf2khu5glc8h" path="res://scenes/basic_card.tscn" id="1_errlg"]
 [ext_resource type="Script" uid="uid://yr6gkomighqb" path="res://scenes/test.gd" id="1_iyx0m"]
 [ext_resource type="PackedScene" uid="uid://d3ema2b36ytps" path="res://scenes/hand.tscn" id="3_74lek"]
+[ext_resource type="PackedScene" uid="uid://c3vxru085k6u5" path="res://scenes/Card.tscn" id="3_iyx0m"]
 
 [node name="test" type="Node2D"]
 script = ExtResource("1_iyx0m")
@@ -14,10 +14,8 @@ offset_right = 520.0
 offset_bottom = 243.0
 text = "new card"
 
-[node name="Basic Card" parent="." instance=ExtResource("1_errlg")]
-position = Vector2(532, 502)
-
 [node name="Hand" parent="." instance=ExtResource("3_74lek")]
+visible = false
 position = Vector2(874, 757)
 
 [node name="Hand2" parent="." instance=ExtResource("3_74lek")]
@@ -34,5 +32,8 @@ rotation = 3.14159
 visible = false
 position = Vector2(100, 448)
 rotation = 1.5708
+
+[node name="Card" parent="." instance=ExtResource("3_iyx0m")]
+position = Vector2(776, 532)
 
 [connection signal="button_down" from="Button" to="Hand" method="raise_hand"]

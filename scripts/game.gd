@@ -17,9 +17,7 @@ func opponent_draw_card(player_id):
 		return
 	for i in range(1,4):
 		var op_hand = get_node("OpHand%s" % i)
-		print(i, op_hand.owner_id, player_id)
 		if op_hand.owner_id == player_id:
-			print(op_hand.owner_id)
 			op_hand.spawn_card_with_slide("back", "cover")
 			break
 
@@ -35,17 +33,16 @@ func assigningOpponentsToHands(playing_order):
 		player_idx = player_idx % 4
 		var op_hand = get_node("OpHand%s" % str(i))
 		op_hand.owner_id = 	playing_order[player_idx]
-		print("opponent hand number %s is assigned player id %s" % [i, op_hand.owner_id])
 
 func _on_deck_pressed() -> void:
 	$GameManager.request_draw_card.rpc_id(1)
 
-func _on_game_manager_played_card(player_id: Variant, card: Variant) -> void:
+func _on_game_manager_played_card(player_id: Variant, card_color: Variant, card_value) -> void:
 	if player_id == multiplayer.get_unique_id():
 		return
 	else:
 		for i in range(1,4):
 			var op_hand = get_node("OpHand%s" % str(i))
 			if op_hand.owner_id == player_id:
-				op_hand.play_card_as_opponent(card)
+				op_hand.play_card_as_opponent(card_color, card_value)
 				break

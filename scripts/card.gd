@@ -13,8 +13,9 @@ var setup_finished = false
 func _ready():
 	original_position = position
 
-func _input(event: InputEvent) -> void:
-	if event is InputEventMouseButton:
+func _on_input_event(viewport, event, shape_idx):
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		print("moooooo")
 		is_picked.emit(self)
 
 func setup(color: String, value: String):

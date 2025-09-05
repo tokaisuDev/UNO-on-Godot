@@ -6,7 +6,7 @@ signal server_disconnected()
 signal order_generated(play_order)
 
 const PORT = 8080
-const ADDR = "192.168.1.6"
+const ADDR = "192.168.1.8"
 
 var players = {}
 var own_info = {"name" : null, "skips": 0}
@@ -125,3 +125,6 @@ func advance_turn():
 	turn_idx = (turn_idx + turn_offset + players.size()) % players.size()
 	var curr_pid = playing_order[turn_idx]
 	$/root/Game/GameManager.process_turn(curr_pid)
+
+func reverse_turn():
+	turn_offset *= -1

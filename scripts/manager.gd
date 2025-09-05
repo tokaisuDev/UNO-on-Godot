@@ -3,7 +3,8 @@ extends Node
 signal drew_card(player_id)
 signal player_turn(player_id)
 signal turn_end(player_id)
-signal played_card(player_id, card)
+signal played_card(player_id, card_color, card_value)
+signal play_approved
 
 # nodes
 var timer : Timer
@@ -64,40 +65,47 @@ func request_draw_card():
 	give_card(caller_id)
 	Networker.advance_turn()
 
-func playable_check(card):
+func playable_check(card_color, card_value):
 	if MostRecentCard == null:
 		return true
-	if cards_penalty > 0 and card.value not in ["+2", "+4"]:
+	if cards_penalty > 0 and card_value not in ["+2", "+4"]:
 		return false
-	if skips > 0 and card.value != "skip":
+	if skips > 0 and card_value != "skip":
 		return false
-	if card.color != MostRecentCard[0] and card.value != MostRecentCard[1]:
+	if card_color != MostRecentCard[0] and card_value != MostRecentCard[1]:
 		return false
 	return true
 
 @rpc("any_peer", "call_local")
-func request_play_card(card):
-	if multiplayer.get_remote_sender_id() != current_turn:
-		return false
-	if playable_check(card):
-		MostRecentCard = [card.color, card.value]
-		if not timer.is_stopped():
-			timer.stop()
-		if card.value == "skip":
-			skips += 1
-		elif card.value == "+2":
-			cards_penalty += 2
-		elif card.value == "+4":
-			cards_penalty += 4
-		played_card.emit(multiplayer.get_remote_sender_id(), card)
-		notify_card_play.rpc(multiplayer.get_remote_sender_id(), card)
-		Networker.advance_turn()
-		return true
-	return false
+func request_play_card(card_color, card_value):
+	var approved = false
+	if multiplayer.get_remote_sender_id() == current_turn:
+		if playable_check(card_color, card_value):
+			MostRecentCard = [card_color, card_value]
+			if not timer.is_stopped():
+				timer.stop()
+			if card_value == "skip":
+				skips += 1
+			elif card_value == "+2":
+				cards_penalty += 2
+			elif card_value == "+4":
+				cards_penalty += 4
+			receive_play_permission.rpc_id(multiplayer.get_remote_sender_id(), true)
+			played_card.emit(multiplayer.get_remote_sender_id(), card_color, card_value)
+			notify_card_play.rpc(multiplayer.get_remote_sender_id(), card_color, card_value)
+			Networker.advance_turn()
+			approved = true
+	if not approved:
+		receive_play_permission.rpc_id(multiplayer.get_remote_sender_id(), false)
+
+@rpc("authority", "call_local")
+func receive_play_permission(is_play_approved):
+	if is_play_approved:
+		play_approved.emit()
 
 @rpc
-func notify_card_play(player_id, card):
-	played_card.emit(multiplayer.get_remote_sender_id(), card)
+func notify_card_play(player_id, card_color, card_value):
+	played_card.emit(player_id, card_color, card_value)
 
 @rpc
 func notify_card_draw(player_id):
@@ -119,9 +127,11 @@ func process_turn(player_id):
 			Networker.advance_turn()
 			return
 		if current_turn:
-			notify_turn_end(current_turn)
+			turn_end.emit(current_turn)
+			notify_turn_end.rpc(current_turn)
 		current_turn = player_id
 		timer.start(turn_time)
+		player_turn.emit(player_id)
 		notify_turn.rpc(player_id)
 
 func _on_turn_timeout():
