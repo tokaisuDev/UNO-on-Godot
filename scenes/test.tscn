@@ -15,8 +15,7 @@ offset_bottom = 243.0
 text = "new card"
 
 [node name="Hand" parent="." instance=ExtResource("3_74lek")]
-visible = false
-position = Vector2(874, 757)
+position = Vector2(1065, 250)
 
 [node name="Hand2" parent="." instance=ExtResource("3_74lek")]
 visible = false
@@ -36,4 +35,5 @@ rotation = 1.5708
 [node name="Card" parent="." instance=ExtResource("3_iyx0m")]
 position = Vector2(776, 532)
 
-[connection signal="button_down" from="Button" to="Hand" method="raise_hand"]
+[connection signal="button_down" from="Button" to="." method="_on_button_button_down"]
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

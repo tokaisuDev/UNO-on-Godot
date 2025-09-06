@@ -1,7 +1,5 @@
 extends Area2D
 
-signal is_picked(card)
-
 @export var card_color: String
 @export var card_value: String
 var owned = true
@@ -12,11 +10,6 @@ var setup_finished = false
 
 func _ready():
 	original_position = position
-
-func _on_input_event(viewport, event, shape_idx):
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-		print("moooooo")
-		is_picked.emit(self)
 
 func setup(color: String, value: String):
 	setup_finished = true
