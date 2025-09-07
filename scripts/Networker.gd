@@ -6,7 +6,7 @@ signal server_disconnected()
 signal order_generated(play_order)
 
 const PORT = 8080
-const ADDR = "192.168.1.8"
+const ADDR = "192.168.1.7"
 
 var players = {}
 var own_info = {"name" : null, "skips": 0}

@@ -78,8 +78,8 @@ func playable_check(card_color, card_value):
 
 @rpc("any_peer", "call_local", "reliable")
 func request_play_card(card_color, card_value, card_index):
-	var approved = false
-	if multiplayer.get_remote_sender_id() == current_turn:
+	var sender_id = multiplayer.get_remote_sender_id()
+	if sender_id == current_turn:
 		if playable_check(card_color, card_value):
 			MostRecentCard = [card_color, card_value]
 			if not timer.is_stopped():
@@ -90,22 +90,20 @@ func request_play_card(card_color, card_value, card_index):
 				cards_penalty += 2
 			elif card_value == "+4":
 				cards_penalty += 4
+			if sender_id == 0:
+				sender_id = 1
 			print(multiplayer.get_remote_sender_id())
-			receive_play_permission.rpc_id(multiplayer.get_remote_sender_id(), true, card_index)
+			receive_play_permission.rpc_id(sender_id, card_index)
 			prints("play approved with card", card_color, card_value)
-			played_card.emit(multiplayer.get_remote_sender_id(), card_color, card_value, card_index)
+			played_card.emit(sender_id, card_color, card_value, card_index)
 			prints("host received play signal with card", card_color, card_value)
-			notify_card_play.rpc(multiplayer.get_remote_sender_id(), card_color, card_value, card_index)
+			notify_card_play.rpc(sender_id, card_color, card_value, card_index)
 			prints("other players received play signal with card", card_color, card_value)
 			Networker.advance_turn()
-			approved = true
-	if not approved:
-		receive_play_permission.rpc_id(multiplayer.get_remote_sender_id(), false, -1)
-
+			
 @rpc("authority", "call_local", "reliable")
-func receive_play_permission(is_play_approved, card_index):
-	if is_play_approved:
-		play_approved.emit(card_index)
+func receive_play_permission(card_index):
+	play_approved.emit(card_index)
 
 @rpc
 func notify_card_play(player_id, card_color, card_value, card_index):
