@@ -1,6 +1,7 @@
 extends Node2D
 
 signal card_discarded
+signal play_impossible
 
 var CardScene = preload("res://scenes/Card.tscn")
 var back_cover = preload("res://assets/cards/back_cover.png")
@@ -122,3 +123,10 @@ func play_card_animation(card):
 	layout_hand()
 	if get_child_count() == 0:
 		$"../GameManager".request_end_game()
+
+func _on_game_manager_player_turn(player_id: Variant) -> void:
+	if player_id == multiplayer.get_unique_id():
+		for card in get_children():
+			if $"../GameManager".playable_check(card.card_color, card.card_value):
+				return
+			$"../GameManager".execute_penalties()

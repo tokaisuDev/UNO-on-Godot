@@ -27,7 +27,7 @@ func _ready() -> void:
 	timer = Timer.new()
 	timer.one_shot = true
 	add_child(timer)
-	timer.timeout.connect(_on_turn_timeout)
+	timer.timeout.connect(execute_penalties)
 
 func renew_deck():
 	for color in CardDatabase.NORM_COLORS:
@@ -135,10 +135,10 @@ func process_turn(player_id):
 			notify_turn_end.rpc(current_turn)
 		current_turn = player_id
 		timer.start(turn_time)
-		player_turn.emit(player_id)
 		notify_turn.rpc(player_id)
+		player_turn.emit(player_id)
 
-func _on_turn_timeout():
+func execute_penalties():
 	if multiplayer.is_server():
 		print("timeout")
 		if cards_penalty > 0:

@@ -58,6 +58,7 @@ script = ExtResource("8_70vka")
 
 [connection signal="play_approved" from="GameManager" to="PlayerHand" method="on_play_approval"]
 [connection signal="player_turn" from="GameManager" to="UI" method="on_player_turn"]
+[connection signal="player_turn" from="GameManager" to="PlayerHand" method="_on_game_manager_player_turn"]
 [connection signal="turn_end" from="GameManager" to="UI" method="on_turn_end"]
 [connection signal="pressed" from="Deck" to="." method="_on_deck_pressed"]
 [connection signal="pressed" from="Deck" to="Card" method="_on_button_pressed"]
