@@ -29,7 +29,7 @@ func _on_join_button_button_down() -> void:
 	
 	connected = true
 	Networker.update_player_info($username_field.text)
-	Networker.join_game()
+	Networker.join_game($address_field.text)
 	
 	$err_text.text = "[color=#5cb85c]Joined as %s[/color] [color=FFDE21]Waiting for other players...[/color]" % $username_field.text
 	update_player_list()
@@ -52,7 +52,7 @@ func _on_host_button_button_down() -> void:
 	$join_button.visible = false
 	$host_button.visible = false
 	$start_game_btn.visible = true
-	$err_text.text = "[color=#5cb85c]You are now the host of a game.[/color] [color=FFDE21]Waiting for other players...[/color]"
+	$err_text.text = "[color=#5cb85c]You are now the host of a game.[/color] [color=FFDE21]Here's your ip address: %s[/color]" % Networker.share_addr
 	update_player_list()
 	show_players()
 

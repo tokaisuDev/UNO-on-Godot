@@ -55,12 +55,28 @@ offset_right = 162.0
 offset_bottom = 167.0
 text = "In-game name:"
 
+[node name="ign_label2" type="Label" parent="."]
+layout_mode = 0
+offset_left = 458.0
+offset_top = 129.0
+offset_right = 537.0
+offset_bottom = 161.0
+text = "Address:"
+
 [node name="username_field" type="LineEdit" parent="."]
 layout_mode = 0
 offset_left = 218.0
 offset_top = 130.0
 offset_right = 426.0
 offset_bottom = 161.0
+max_length = 42
+
+[node name="address_field" type="LineEdit" parent="."]
+layout_mode = 0
+offset_left = 540.0
+offset_top = 128.0
+offset_right = 748.0
+offset_bottom = 159.0
 max_length = 42
 
 [node name="err_text" type="RichTextLabel" parent="."]

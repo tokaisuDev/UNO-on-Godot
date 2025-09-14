@@ -6,7 +6,8 @@ signal server_disconnected()
 signal order_generated(play_order)
 
 const PORT = 8080
-const ADDR = "192.168.1.9"
+
+var share_addr
 
 var players = {}
 var own_info = {"name" : null, "skips": 0}
@@ -68,11 +69,14 @@ func host_game() -> String:
 	
 	players[1] = own_info
 	print(players)
+	
+	share_addr = upnp_setup(PORT)
+	
 	return "OK"
 	
-func join_game():
+func join_game(addr):
 	peer = ENetMultiplayerPeer.new()
-	var error = peer.create_client(ADDR, PORT)
+	var error = peer.create_client(addr, PORT)
 	if error:
 		return error
 	
@@ -81,6 +85,20 @@ func join_game():
 	multiplayer.multiplayer_peer = peer
 	return "OK"
 
+func upnp_setup(server_port):
+	var upnp = UPNP.new()
+	var err = upnp.discover()
+
+	if err != OK:
+		push_error(str(err))
+		return
+
+	if upnp.get_gateway() and upnp.get_gateway().is_valid_gateway():
+		upnp.add_port_mapping(server_port, server_port, ProjectSettings.get_setting("application/config/name"), "UDP")
+		upnp.add_port_mapping(server_port, server_port, ProjectSettings.get_setting("application/config/name"), "TCP")
+	
+	return upnp.query_external_address()
+	
 func start_game():
 	load_game.rpc()
 
