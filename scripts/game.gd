@@ -34,6 +34,7 @@ func assigningOpponentsToHands(playing_order):
 		op_hand.owner_id = 	playing_order[player_idx]
 
 func _on_deck_pressed() -> void:
+	print("p")
 	$GameManager.request_draw_card.rpc_id(1)
 
 func _on_game_manager_played_card(player_id: Variant, card_color: Variant, card_value, card_index) -> void:

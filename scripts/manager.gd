@@ -59,6 +59,7 @@ func receive_card(card):
 
 @rpc("any_peer", "call_local")
 func request_draw_card():
+	print("ahhhh")
 	var caller_id = multiplayer.get_remote_sender_id()
 	if caller_id != current_turn:
 		return

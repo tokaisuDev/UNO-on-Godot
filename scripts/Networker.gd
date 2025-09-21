@@ -42,7 +42,6 @@ func _on_player_disconnected(id):
 	player_disconnected.emit(id, player_name)
 	
 func _on_connected_ok():
-	print("im connected")
 	var peer_id = multiplayer.get_unique_id()
 	players[peer_id] = own_info
 
@@ -68,7 +67,6 @@ func host_game() -> String:
 	multiplayer.multiplayer_peer = peer
 	
 	players[1] = own_info
-	print(players)
 	
 	share_addr = upnp_setup(PORT)
 	
@@ -107,6 +105,7 @@ func request_start_game():
 		return "not_enough_players"
 	
 func start_game():
+	print(players)
 	load_game.rpc()
 
 @rpc("call_local", "reliable")

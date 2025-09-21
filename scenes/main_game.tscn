@@ -6,7 +6,7 @@
 [ext_resource type="Script" uid="uid://cwfee4vo6nf0p" path="res://scripts/ui.gd" id="3_70vka"]
 [ext_resource type="PackedScene" uid="uid://d3ema2b36ytps" path="res://scenes/hand.tscn" id="4_ipu61"]
 [ext_resource type="PackedScene" uid="uid://c8rabjewwm8nm" path="res://scenes/manager.tscn" id="5_ipu61"]
-[ext_resource type="Texture2D" uid="uid://cnm50q5f8of8t" path="res://assets/cards/back_cover.png" id="6_wi4c7"]
+[ext_resource type="Texture2D" uid="uid://cnm50q5f8of8t" path="res://assets/cards/back_cover.png" id="8_2l77h"]
 [ext_resource type="Script" uid="uid://c2rlvg2v86y14" path="res://scripts/discard_pile.gd" id="8_70vka"]
 
 [node name="Game" type="Node2D"]
@@ -28,15 +28,6 @@ position = Vector2(589, 212)
 
 [node name="GameManager" parent="." instance=ExtResource("5_ipu61")]
 
-[node name="Deck" type="Button" parent="."]
-offset_left = 156.0
-offset_top = 89.0
-offset_right = 330.0
-offset_bottom = 354.0
-mouse_filter = 2
-icon = ExtResource("6_wi4c7")
-flat = true
-
 [node name="PlayerHand" parent="." instance=ExtResource("4_ipu61")]
 position = Vector2(800, 850)
 
@@ -56,10 +47,17 @@ rotation = 4.71239
 position = Vector2(800, 450)
 script = ExtResource("8_70vka")
 
+[node name="Deck" type="Button" parent="."]
+offset_left = 257.0
+offset_top = 140.0
+offset_right = 431.0
+offset_bottom = 405.0
+icon = ExtResource("8_2l77h")
+flat = true
+
 [connection signal="play_approved" from="GameManager" to="PlayerHand" method="on_play_approval"]
 [connection signal="player_turn" from="GameManager" to="UI" method="on_player_turn"]
 [connection signal="player_turn" from="GameManager" to="PlayerHand" method="_on_game_manager_player_turn"]
 [connection signal="turn_end" from="GameManager" to="UI" method="on_turn_end"]
-[connection signal="pressed" from="Deck" to="." method="_on_deck_pressed"]
-[connection signal="pressed" from="Deck" to="Card" method="_on_button_pressed"]
 [connection signal="card_discarded" from="PlayerHand" to="DiscardPile" method="_on_player_hand_card_discarded"]
+[connection signal="pressed" from="Deck" to="." method="_on_deck_pressed"]

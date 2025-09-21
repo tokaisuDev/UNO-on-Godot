@@ -9,30 +9,6 @@ var owned = false
 var owner_id : int = -1
 var play_approved = false
 
-#func _ready():
-	#_update_position()
-	#get_viewport().size_changed.connect(Callable(self, "_update_position"))
-#
-#func _update_position():
-	#var viewport_size = get_viewport_rect().size
-	#prints(viewport_size.x, viewport_size.y)
-	#if self.name == "OpHand1":
-		#print(1)
-		#global_position.x = 150
-		#global_position.y = viewport_size.y / 2
-	#elif self.name == "OpHand2":
-		#print(2)
-		#global_position.x = viewport_size.x / 2
-		#global_position.y = 75
-	#elif self.name == "OpHand3":
-		#print(3)
-		#global_position.x = viewport_size.x - 150
-		#global_position.y = viewport_size.y / 2
-	#else:
-		#print("player")
-		#global_position.x = viewport_size.x / 2
-		#global_position.y = 300
-
 func _process(delta: float):
 	if not owned:
 		return
