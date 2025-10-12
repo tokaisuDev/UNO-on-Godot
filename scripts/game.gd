@@ -23,15 +23,21 @@ func opponent_draw_card(player_id):
 
 func assigningOpponentsToHands(playing_order):
 	var player_idx
-	for i in range(4):
+	var positions = [0,1,2,3]
+	if (playing_order.size() == 2):
+		positions.erase(1)
+		positions.erase(3)
+	if (playing_order.size() == 3):
+		positions.erase(2)
+	for i in range(playing_order.size()):
 		if playing_order[i] == multiplayer.get_unique_id():
 			player_idx = i
 			break
-	for i in range(1,4):
-		player_idx += 1
-		player_idx = player_idx % 4
-		var op_hand = get_node("OpHand%s" % str(i))
-		op_hand.owner_id = 	playing_order[player_idx]
+	$UI.assigning_player_field(playing_order[player_idx])
+	for i in range(1,playing_order.size()):
+		var op_hand = get_node("OpHand%s" % str(positions[i]))
+		op_hand.owner_id = 	playing_order[(player_idx+i)%playing_order.size()]
+		$UI.assigning_player_field(op_hand.owner_id, positions[i])
 
 func _on_deck_pressed() -> void:
 	print("p")

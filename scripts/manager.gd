@@ -11,7 +11,7 @@ var timer : Timer
 
 # game variables
 const on_start_card_amount = 7
-const turn_time = 10
+const turn_time = 8
 var deck = []
 var early_game = true
 var current_turn = null
@@ -42,7 +42,7 @@ func get_card():
 		renew_deck()
 	return deck.pop_back()
 	
-func give_card(player_id):
+func give_card(player_id, pen):
 	var card = get_card()
 	if player_id == 1:
 		$"../PlayerHand".spawn_card_with_slide(card[0], card[1])
@@ -50,7 +50,7 @@ func give_card(player_id):
 		drew_card.emit(player_id)
 		receive_card.rpc_id(player_id, card)
 	notify_card_draw.rpc(player_id)
-	if not early_game:
+	if not early_game and not pen:
 		Networker.advance_turn()
 
 @rpc
@@ -59,12 +59,13 @@ func receive_card(card):
 
 @rpc("any_peer", "call_local")
 func request_draw_card():
-	print("ahhhh")
 	var caller_id = multiplayer.get_remote_sender_id()
 	if caller_id != current_turn:
 		return
-	give_card(caller_id)
-	Networker.advance_turn()
+	if penalties_exist():
+		execute_penalties()
+	else:
+		give_card(caller_id, false)
 
 func playable_check(card_color, card_value):
 	if MostRecentCard == null:
@@ -76,6 +77,9 @@ func playable_check(card_color, card_value):
 	if card_color != MostRecentCard[0] and card_value != MostRecentCard[1]:
 		return false
 	return true
+
+func penalties_exist():
+	return cards_penalty > 0 or skips > 0
 
 @rpc("any_peer", "call_local", "reliable")
 func request_play_card(card_color, card_value, card_index):
@@ -95,11 +99,8 @@ func request_play_card(card_color, card_value, card_index):
 				sender_id = 1
 			print(multiplayer.get_remote_sender_id())
 			receive_play_permission.rpc_id(sender_id, card_index)
-			prints("play approved with card", card_color, card_value)
 			played_card.emit(sender_id, card_color, card_value, card_index)
-			prints("host received play signal with card", card_color, card_value)
 			notify_card_play.rpc(sender_id, card_color, card_value, card_index)
-			prints("other players received play signal with card", card_color, card_value)
 			Networker.advance_turn()
 			
 @rpc("authority", "call_local", "reliable")
@@ -126,9 +127,10 @@ func notify_turn_end(player_id):
 
 func process_turn(player_id):
 	if early_game:
-		give_card(player_id)
+		give_card(player_id, false)
 	else:
 		if players_info[player_id]["skips"] > 0:
+			players_info[player_id]["skips"]-=1
 			Networker.advance_turn()
 			return
 		if current_turn:
@@ -141,10 +143,9 @@ func process_turn(player_id):
 
 func execute_penalties():
 	if multiplayer.is_server():
-		print("timeout")
 		if cards_penalty > 0:
 			while cards_penalty:
-				give_card(current_turn)
+				give_card(current_turn, true)
 				cards_penalty -= 1
 			Networker.advance_turn()
 		elif skips > 0:
@@ -152,7 +153,7 @@ func execute_penalties():
 			skips = 0
 			Networker.advance_turn()
 		else:
-			give_card(current_turn)
+			give_card(current_turn, false)
 
 @rpc("any_peer", "call_local", "reliable")
 func request_end_game():

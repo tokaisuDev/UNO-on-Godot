@@ -68,7 +68,7 @@ func _on_leave_button_button_down() -> void:
 func _on_start_game_btn_button_down() -> void:
 	var code = Networker.request_start_game()
 	if code:
-		$err_text.text = "[color=ED4337]There are not enough players (4 to be exact) to start the game."
+		$err_text.text = "[color=ED4337] You can't play alone."
 
 func _on_player_disconnect(pid, name):
 	if not connected:

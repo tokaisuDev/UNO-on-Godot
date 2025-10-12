@@ -98,14 +98,13 @@ func upnp_setup(server_port):
 	return upnp.query_external_address()
 	
 func request_start_game():
-	if players.size() == 4:
+	if players.size() > 1:
 		start_game()
 		return ""
 	else:
 		return "not_enough_players"
 	
 func start_game():
-	print(players)
 	load_game.rpc()
 
 @rpc("call_local", "reliable")

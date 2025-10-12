@@ -3,6 +3,10 @@ extends Node2D
 signal card_discarded
 signal play_impossible
 
+const draw_CD = 0.5
+const reposition_CD = 0.5
+const max_rot = 45
+
 var CardScene = preload("res://scenes/Card.tscn")
 var back_cover = preload("res://assets/cards/back_cover.png")
 var owned = false
@@ -48,7 +52,8 @@ func spawn_card_with_slide(color, value):
 
 	# Use built-in tweening (no need for a Tween node)
 	var tween = create_tween()
-	tween.tween_property(card, "position", final_pos, 0.4).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.set_parallel(false)
+	tween.tween_property(card, "position", final_pos, draw_CD).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
 	await tween.finished
 	layout_hand()
@@ -64,7 +69,7 @@ func layout_hand():
 		
 		# tween for a smooth slide
 		var tween = create_tween()
-		tween.tween_property(card, "position", target_pos, 0.3).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		tween.tween_property(card, "position", target_pos, reposition_CD).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 		card.update_original_pos(target_pos)
 		card.hover_down()
 
@@ -85,24 +90,44 @@ func play_card_as_opponent(card_color, card_value, card_index):
 
 func play_card_animation(card):
 	$"../DiscardPile".pile_check()
-	var card_global_pos = card.global_position
-	card.reparent($"../DiscardPile")
-	card.global_position = card_global_pos
+	var rotation = get_card_rotation(card)
+	var offset = randf_range(0.1,5)
+	if rotation < 0:
+		offset = -offset
+	if rotation == 0:
+		rotation+offset
 	
-	var target_pos = $"../DiscardPile".global_position
+	var deck_pos = $"../DiscardPile".global_position
 	var tween = create_tween()
 	tween.set_parallel(true)
-	tween.tween_property(card, "global_position", target_pos, 0.5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	tween.tween_property(card, "rotation_degrees", randf_range(-80, 80), 0.5)
+	tween.tween_property(card, "global_position", deck_pos, 0.5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween.tween_property(card, "rotation_degrees", rotation, 0.5)
+	card.reparent($"../DiscardPile")
 	card.z_index = $"../DiscardPile".get_child_count()
 	
 	layout_hand()
 	if get_child_count() == 0:
 		$"../GameManager".request_end_game()
 
-func _on_game_manager_player_turn(player_id: Variant) -> void:
-	if player_id == multiplayer.get_unique_id():
-		for card in get_children():
-			if $"../GameManager".playable_check(card.card_color, card.card_value):
-				return
-			$"../GameManager".execute_penalties()
+func get_card_rotation(card):
+	var idx = card.z_index
+	var card_cnt = get_child_count()
+	var dir = 1
+	var rot
+	var l
+	var r
+	if card_cnt % 2 == 0:
+		l = card_cnt/2-1
+		r = l+1
+		if idx <= r:
+			return (max_rot/r)*(idx+1)
+		else:
+			return -(max_rot/r)*(idx-r+1)
+	else:
+		var mid = (card_cnt+1)/2-1
+		if idx == mid:
+			return 0
+		elif idx < mid:
+			return (max_rot/(mid-1))*(idx+1)
+		else:
+			return -(max_rot/(mid-1))*(idx-mid)
