@@ -32,13 +32,13 @@ func hover_up():
 	if position.y == original_position.y-20:
 		return
 	var tween = create_tween()
-	tween.tween_property(self, "position:y", original_position.y-20, 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.tween_property(self, "position:y", original_position.y-20, 0.05).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
 func hover_down():
 	if position.y == original_position.y:
 		return
 	var tween = create_tween()
-	tween.tween_property(self, "position:y", original_position.y, 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.tween_property(self, "position:y", original_position.y, 0.05).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
 func get_rect() -> Rect2:
 	if $Sprite2D.texture:

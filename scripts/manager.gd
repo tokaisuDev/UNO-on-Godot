@@ -146,6 +146,7 @@ func execute_penalties():
 		if cards_penalty > 0:
 			while cards_penalty:
 				give_card(current_turn, true)
+				await get_tree().create_timer(0.5).timeout
 				cards_penalty -= 1
 			Networker.advance_turn()
 		elif skips > 0:
@@ -169,7 +170,7 @@ func start_game():
 		players_info[player]["skips"] = 0
 	renew_deck()
 	for k in range(on_start_card_amount):
-		for i in range(4):
+		for i in range(Networker.players.size()):
 			Networker.advance_turn()
 	early_game = false
 	Networker.advance_turn()

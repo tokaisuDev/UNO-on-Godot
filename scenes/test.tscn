@@ -1,48 +1,16 @@
-[gd_scene load_steps=5 format=3 uid="uid://el1jlkfohtkc"]
+[gd_scene load_steps=3 format=3 uid="uid://el1jlkfohtkc"]
 
 [ext_resource type="Script" uid="uid://yr6gkomighqb" path="res://scenes/test.gd" id="1_iyx0m"]
-[ext_resource type="PackedScene" uid="uid://d3ema2b36ytps" path="res://scenes/hand.tscn" id="3_74lek"]
-[ext_resource type="PackedScene" uid="uid://c3vxru085k6u5" path="res://scenes/Card.tscn" id="3_iyx0m"]
 [ext_resource type="Texture2D" uid="uid://cnm50q5f8of8t" path="res://assets/cards/back_cover.png" id="4_74lek"]
 
 [node name="test" type="Node2D"]
 script = ExtResource("1_iyx0m")
 
-[node name="Button" type="Button" parent="."]
-offset_left = 427.0
-offset_top = 220.0
-offset_right = 910.0
-offset_bottom = 438.0
+[node name="cad" type="Node2D" parent="."]
 
-[node name="Hand" parent="." instance=ExtResource("3_74lek")]
-position = Vector2(1065, 250)
+[node name="Sprite2D" type="Sprite2D" parent="cad"]
+position = Vector2(240, 220)
+texture = ExtResource("4_74lek")
 
-[node name="Hand2" parent="." instance=ExtResource("3_74lek")]
-visible = false
-position = Vector2(1513, 432)
-rotation = 4.71239
-
-[node name="Hand3" parent="." instance=ExtResource("3_74lek")]
-visible = false
-position = Vector2(991, 101)
-rotation = 3.14159
-
-[node name="Hand4" parent="." instance=ExtResource("3_74lek")]
-visible = false
-position = Vector2(100, 448)
-rotation = 1.5708
-
-[node name="Card" parent="." instance=ExtResource("3_iyx0m")]
-position = Vector2(776, 532)
-
-[node name="Button2" type="Button" parent="."]
-offset_left = 119.0
-offset_top = 120.0
-offset_right = 293.0
-offset_bottom = 385.0
-icon = ExtResource("4_74lek")
-flat = true
-
-[connection signal="button_down" from="Button" to="." method="_on_button_button_down"]
-[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
-[connection signal="pressed" from="Button2" to="." method="_on_button_2_pressed"]
+[node name="target_pos" type="Node2D" parent="."]
+position = Vector2(1261, 579)

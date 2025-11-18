@@ -3,10 +3,11 @@ extends Node2D
 signal card_discarded
 signal play_impossible
 
-const draw_CD = 0.5
-const reposition_CD = 0.5
-const max_rot = 45
+const draw_duration = 0.5
+const reposition_duration = 0.5
+const max_rot = 25
 
+var testing = false
 var CardScene = preload("res://scenes/Card.tscn")
 var back_cover = preload("res://assets/cards/back_cover.png")
 var owned = false
@@ -53,7 +54,7 @@ func spawn_card_with_slide(color, value):
 	# Use built-in tweening (no need for a Tween node)
 	var tween = create_tween()
 	tween.set_parallel(false)
-	tween.tween_property(card, "position", final_pos, draw_CD).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.tween_property(card, "position", final_pos, draw_duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
 	await tween.finished
 	layout_hand()
@@ -69,7 +70,7 @@ func layout_hand():
 		
 		# tween for a smooth slide
 		var tween = create_tween()
-		tween.tween_property(card, "position", target_pos, reposition_CD).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		tween.tween_property(card, "position", target_pos, reposition_duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 		card.update_original_pos(target_pos)
 		card.hover_down()
 
@@ -79,6 +80,9 @@ func on_play_approval(card_index):
 
 func play_card(card):
 	var card_index = card.z_index
+	if testing:
+		on_play_approval(card_index)
+		return
 	$"../GameManager".request_play_card.rpc_id(1, card.card_color, card.card_value, card_index)
 
 func play_card_as_opponent(card_color, card_value, card_index):
@@ -110,24 +114,4 @@ func play_card_animation(card):
 		$"../GameManager".request_end_game()
 
 func get_card_rotation(card):
-	var idx = card.z_index
-	var card_cnt = get_child_count()
-	var dir = 1
-	var rot
-	var l
-	var r
-	if card_cnt % 2 == 0:
-		l = card_cnt/2-1
-		r = l+1
-		if idx <= r:
-			return (max_rot/r)*(idx+1)
-		else:
-			return -(max_rot/r)*(idx-r+1)
-	else:
-		var mid = (card_cnt+1)/2-1
-		if idx == mid:
-			return 0
-		elif idx < mid:
-			return (max_rot/(mid-1))*(idx+1)
-		else:
-			return -(max_rot/(mid-1))*(idx-mid)
+	return max_rot-((max_rot)*2/get_child_count())*(card.z_index+1)
